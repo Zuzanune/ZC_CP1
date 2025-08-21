@@ -1,7 +1,7 @@
 # ZC, 1st. Inputs and outputs notes
 name1 = input("what is your name: ")
 if name1 == "zane" or "Zane":
-    print ("welcome ", name1, "booting up admin servers")
+    print ("welcome",name1, "booting up admin servers")
 elif name1 == "Mrs Larose":
     print ("welcome ", name1, "booting up admin servers")
 elif name1 == "Alex" or "Larry" or "Kingsley" or "Lucas" or "Levi":
