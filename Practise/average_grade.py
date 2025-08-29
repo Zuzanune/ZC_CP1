@@ -5,13 +5,13 @@ grades = []
 grade_total = 0
 while class_numbers > 0:
     if class_numbers == 1:
-        class1 = float(input("what is your grade for your 1st class"))
+        class1 = float(input("what is your grade for your last class"))
         grades.append(class1)
     elif class_numbers == 2:
-        class2 = float(input("what is your grade for your 2nd class?"))
+        class2 = float(input("what is your grade for your 2nd to last class?"))
         grades.append(class2)
     elif class_numbers == 3:
-        class3 = float(input("what is your grade for your 3rd class?"))
+        class3 = float(input("what is your grade for your 3rd to last class?"))
         grades.append(class3)
     else:
         classetc = float(input("what is your grade for your next class?"))
