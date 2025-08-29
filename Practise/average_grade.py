@@ -1,4 +1,4 @@
-#ZC 1st Average grade
+#ZC 1st Average Grade
 class_amount = float(input("how many classes do you have?:  "))
 class_numbers = class_amount
 grades = []
