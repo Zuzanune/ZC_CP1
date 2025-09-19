@@ -10,6 +10,7 @@ monster_damage = random.randint(1,3)
 monster_dex = 2
 hit_roll = random.randint(1,20) + player_attack
 crit = 20 + player_attack
+hit_roll = 20
 
 if hit_roll >= 10 + monster_dex:
     print ("you hit! roll for damage")
@@ -23,5 +24,6 @@ elif hit_roll == crit:
     print (f"you did {critdamage} damage. Nice crit!")
 else:
     print ("darn, you missed")
+print ("your turn is over")
 
 
