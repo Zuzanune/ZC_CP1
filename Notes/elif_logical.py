@@ -9,7 +9,7 @@ elif float(grade) >91.5 and grade < 100:
 elif float(grade) >= 89 and grade < 91.5:
     print ("a A-. not bad")
 elif float(grade) >= 83 and grade < 89:
-    print ("a B+ or a B is not bad...")
+    print ("a B+ or a B is not terrible.")
 elif grade < 0.0:
     print ("what? how! you got less then zero?")
 else:
