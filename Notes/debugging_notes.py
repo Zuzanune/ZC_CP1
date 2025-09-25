@@ -1,0 +1,13 @@
+#ZC 1st DEBBUGING NOTES
+
+#syntax error - grammer error
+#   print"vienna"
+# read error message, go to that lin of code, fix the syntax
+# Logic Errors - We gave the wrong steps
+numone = "2"
+numtwo = "5"
+print (numone + numtwo)
+
+#have a well thought out plan, step by step go through our logic
+
+# Run-time error
