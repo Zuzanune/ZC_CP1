@@ -24,7 +24,7 @@ def start_game():
             #because that was missing. this is a logic error
         elif guess < number_to_guess:
             print("Too low! Try again.")
-            attempts += 1     
-        continue
+            attempts += 1
     print("Game Over. Thanks for playing!")
+    #continue statement not nessasary
 start_game()
