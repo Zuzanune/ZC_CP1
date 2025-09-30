@@ -14,6 +14,6 @@ print (numone + numtwo)
 import random
 R = True
 while R:
-    denominator = random.randint(-100000000000,100)
+    denominator = random.randint(-1000000,100)
     print(10/denominator)
 num = 1
