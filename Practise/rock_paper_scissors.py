@@ -15,12 +15,11 @@ while running:
         print ("rock!!")
         print("""
               ________
-            /        \\
+            /         \\
            / //       |
-           | \\       |
+           | \\        |
            \\         / 
             \\_______/    """)
-        print ("(just pretend that is a rock)")
     elif attack == "scissors":
         print ("Scissors!!")
         print ("""
@@ -46,7 +45,7 @@ while running:
                |_______|""")
     if pattack == attack:
         print ("Its a tie!")    
-    elif (pattack.lower() == "rock" and attack == "scissors") or (pattack.lower() == "scissors" and attack == "paper") or (pattack.lower() == "paper" and attack == "Rock"):
+    elif (pattack.lower() == "rock" and attack == "scissors") or (pattack.lower() == "scissors" and attack == "paper") or (pattack.lower() == "paper" and attack == "rock"):
         print ("You win!")
     elif (pattack.lower() == "rock" and attack == "paper") or (pattack.lower() == "scissors" and attack == "rock") or (pattack.lower() == "paper" and attack == "scissors"):
         print ("You lose!")
@@ -56,6 +55,7 @@ while running:
     quits = input("do you want to quit?(y/n)")
     if quits.lower() == "y":
         print ("ok, goodbye")
+        break
     else:
         continue
 
