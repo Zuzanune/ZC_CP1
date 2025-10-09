@@ -1,19 +1,42 @@
 ZC 1st psudocode tic tac toe
-row_1 = 0
-row_2 = 0
-row_3 = 0
-row_4 = 0
-row_5 = 0
-row_6 = 0
-row_7 = 0
-row_8 = 0
-is game running = yes
-the board = 000
-            000
-            000
+import random module
+ask player if they want to be X or O
+score list = [0,0,0,0,0,0,0,0,0]
+display list = [0,0,0,0,0,0,0,0,0]
 while game is running:
-    print board
-    print "choose square 1, 2, 3, 4, 5, 6, 7, 8, 9,
-    player choice = input
-    
-
+    display display_list 1-3
+    display display_list 4-6
+    display display_list 7-9
+    ask player which of the nine squares and assign it to variable user_choice
+    for every item in list rows:
+        if item = user_choice:
+            increase the rows in score_list that corispond to the square chosen by one
+            select user_choice in display list and change that item in display list to X or O
+    if any rows in score list are equal to three:
+        Player wins!
+    Computer turn!
+    computer_luck = random number between 1 and 3
+    computer_choice_of_cube = random number between 1 and 2
+    choice_of_cube = 0
+    if computer_choice_of_cube = 1:
+        choice_of_cube = 1
+    else:
+        choice_of_cube = -1
+    for every item in score_list
+        if computer_luck = 2 or 3
+            if item in Score list = 1 or 2
+                find index of item in list
+                indexvar = index of item
+                if index of item in display_list does not equal x or O
+                    index = index + choice_of_cube
+                    find choice_of_cube in score list and increase the score of all rows assosiated with it by 1
+                    break out of for loop
+                else:
+                continue to next iteration
+            else:
+                continue to next iteration
+        else:
+        choose random square that does not equal X or O and increase the score of all rows associated with it by 1
+        break out of loop
+    if any rows in score list are equal to three:
+        Computer wins!
