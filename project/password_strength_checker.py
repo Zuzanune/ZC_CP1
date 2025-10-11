@@ -41,7 +41,7 @@ for X in password:
             #increase score
             number = True
             #numbers can no longer effect the score
-    if X.lower() == True:
+    if X.islower() == True:
         #check if X is a lowercase letter
         if lower == False:
             #check if a lowercase number has already been found
