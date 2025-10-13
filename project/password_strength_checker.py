@@ -1,69 +1,93 @@
 #ZC 1st Password Strength Checker
-score = 0
+
 #assign score variable
-upper = False
+score = 0
 #create variable to make sure more then one uppercase letter will not increase the score
-length = 0
+upper = False
 #create variable to check length
-lower = False
+length = 0
 #create variable to make sure more then one lowercase letter will not increase the score
-SC = False
+lower = False
 #create start variable to let player only have one special character effect the score
-number = False
+special_character = False
 #create start variable to let player only have one number effect the score
-password = input("please enter your password for analasis:  ")
+number = False
 #ask the user for a password
-password.strip()
+password = input("please enter your password for analasis:\n")
 #idiot proof the password
-for X in password:
-    #start password for loop
-    if X == "(" or "!" or "@" or "#" or "$" or "%" or "^" or "&" or "*" or "(" or ")" or "_" or "+" or "-" or "=" or "[" or "]" or "{" or "}" or "|" or ";" or ":" or "," or "." or "<" or ">" or "?" or ")":
-        #check for special characters
-        if SC != True:
-            #check if a special character has already been found
-            score += 1
+password = password.strip()
+#create function for giving tips later
+def code_tips():
+    if length < 8:
+        print ("try increasing the length")
+    if upper == False:
+        print ("try adding an uppercase letter")
+    if lower == False:
+        print ("try adding a lowercase letter")
+    if number == False:
+        print ("try adding a number")
+    if special_character == False:
+        print ("try adding a special character")
+#start password for loop
+for X in password:    
+    #check for special characters
+    if X == "(" or X =="!" or X =="@" or X =="#" or X =="$" or X =="%" or X =="^" or X =="&" or X =="*" or X =="(" or X == ")" or X =="_" or X =="+" or X =="-" or X =="=" or X =="[" or X =="]" or X =="{" or X =="}" or X =="|" or X ==";" or X ==":" or X =="," or X =="." or X =="<" or X ==">" or X =="?" or X ==")":    
+        #check if a special character has already been found
+        if special_character != True:
             #increase score
-            SC = True
+            score += 1
             #Special characters no longer effect score
+            special_character = True
+            #check if the letter is uppercase
     if X.isupper() == True:
-        #check if the letter is uppercase
+        #check if an uppercase letter has already been found
         if upper == False:
-            #check if an uppercase letter has already been found
-            score += 1
             #increase score
-            upper = True
+            score += 1
             #uppercase letters can no longer effect the score
+            upper = True
+    #check if the letter is a number
     if X.isdigit() == True:
-        #check if the letter is a number
+        #check if a number has already been found
         if number == False:
-            #check if a number has already been found
-            score += 1
             #increase score
-            number = True
+            score += 1
             #numbers can no longer effect the score
+            number = True
+    #check if X is a lowercase letter
     if X.islower() == True:
-        #check if X is a lowercase letter
+        #check if a lowercase number has already been found
         if lower == False:
-            #check if a lowercase number has already been found
-            score += 1
             #increase score
-            lower = True
-            #lowercase numbers can not longer effect code
-    length += 1
+            score += 1
+            #lowercase numbers can no longer effect the score
+            lower = True 
     #increase length
-if length > 8:
-    #check length
-    score += 1
+    length += 1
+#check length
+if length >= 8:
     #increase score
-if score < 2:
-    print (f"your score is{score} you should work on that password more")
+    score += 1
+    #tell user their score
+
+if score == 0:
+    print ("your score is 0. you should work on that password more")
+    print ("try adding a password")
+elif score <= 2:
+    print (f"your score is {score}. you should work on that password more")
+    code_tips()
 elif score == 3:
-    print (f"your score is 3, about average. dont use this password for anything important")
+    print (f"your score is 3, about average. Don't use this password for anything important")
+    code_tips()
 elif score == 4:
-    print (f"your score is 4. it is a great password, but it could use some work")
+    print (f"your score is 4. it is a great password, but it could use some little tweaks")
+    code_tips()
 elif score == 5:
     print ("That is a great password! you have a score of 5! I doubt anyone could figure it out.")
-#tell player score
+else:
+    print ("error")
+#finished
+
 
 
 
