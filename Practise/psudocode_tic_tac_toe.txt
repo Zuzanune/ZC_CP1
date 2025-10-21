@@ -35,6 +35,7 @@ while game is running:
                 continue to next iteration
             else:
                 continue to next iteration
+                reset computer luck
         else:
         choose random square that does not equal X or O and increase the score of all rows associated with it by 1
         break out of loop
