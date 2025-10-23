@@ -1,12 +1,9 @@
 # ZC 1st Caesar Cipher
-
 # create start list of alphabet
 alphebet = "abcdefghijklmnopqrstuvwxyz"
 enstring = ""
-
 # ask user what they are encoding
 string = input("what are you trying to encode/decode:  ")
-
 # create function for encode
 def code(Encodenum, enstring):
     newlet = ""
@@ -23,10 +20,8 @@ def code(Encodenum, enstring):
         else:
             enstring += x  # keep non-letter characters
     return enstring
-
 # call encode function
 alincrease = int(input("by which number do you want to encode your message along the Caesar cipher:  "))
 enstring = code(alincrease, enstring)
-
 # print encoded string
-print(f"the encoded message is now {enstring}")
+print(f"the message is now {enstring}")
