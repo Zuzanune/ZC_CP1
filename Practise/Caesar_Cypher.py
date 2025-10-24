@@ -18,7 +18,8 @@ def code(Encodenum, enstring):
             newlet = alphebet[encodednum]
             enstring += newlet
         else:
-            enstring += x  # keep non-letter characters
+            enstring += x
+            #ensure that non-letter characters are not annoyingly modified
     return enstring
 # call encode function
 alincrease = int(input("by which number do you want to encode your message along the Caesar cipher:  "))
