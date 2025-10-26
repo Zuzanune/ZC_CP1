@@ -25,6 +25,7 @@ while True:
         user_AC += 1
         user_HP += 5
         user_DEX += 5
+        user_SS += 2
         user_AC += int((user_DEX - 10) / 2)
     else:
         user_crit_chance = [20]
@@ -34,7 +35,7 @@ while True:
         user_SS += 7
         user_HP -= random.randint(2, 12)
     max_HP = user_HP
-    base_SS = user_SS
+    max_SS = user_SS
     while True:
         mon_HP = random.randint(1, difficulty * 2)
         mon_AC = random.randint(8 + int(difficulty / 10), 10 + int(difficulty / 10))
@@ -151,7 +152,7 @@ while True:
             print(f"\nYou defeated the {enemy}! Victory!")
             difficulty += 10
             user_HP = max_HP
-            user_SS = base_SS
+            user_SS = max_SS
             healing_potions = 3
             print(f"\nDifficulty has increased to {difficulty}!")
             cont = input("Continue to the next battle? (y/n): ").lower()
