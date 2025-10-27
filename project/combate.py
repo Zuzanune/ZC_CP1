@@ -13,13 +13,13 @@ while True:
     print("Ho there adventurer! what might be your name?")
     user_name = input("> ")
     print("What class might you be?")
-    uclass = input("Choose fighter, rogue, or wizard:  ").lower()
+    uclass = input("Choose fighter, rogue, barbarian or wizard:  ").lower()
     if uclass == "fighter":
         user_crit_chance = [19, 20]
         user_damage = 20
         user_AC += 2
         user_HP += 15
-        user_STR += 5
+        user_STR += 3
     elif uclass == "rogue":
         user_crit_chance = [15,16,17,18, 19, 20]
         user_damage = 15
@@ -28,6 +28,13 @@ while True:
         user_DEX += 5
         user_SS += 2
         user_AC += int((user_DEX - 10) / 2)
+    elif uclass == "barbarian":
+        user_crit_chance = [17,18,19,20]
+        user_STR += 10
+        luck += 2
+        user_AC -= 4
+        user_SS = 0
+        user_HP += random.randint(20,40)
     else:
         user_crit_chance = [20]
         user_damage = 6
