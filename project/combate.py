@@ -6,10 +6,10 @@ while True:
     user_HP = random.randint(20, 40)
     user_AC = 10
     healing_potions = 3
-    user_STR = random.randint(8, 12)
-    user_DEX = random.randint(8, 12)
+    user_STR = random.randint(0, 2)
+    user_DEX = random.randint(0, 2)
     user_SS = random.randint(0, 1)
-    luck = 0
+    luck = random.randint(0,1)
     print("Ho there adventurer! what might be your name?")
     user_name = input("> ")
     print("What class might you be?")
@@ -34,6 +34,7 @@ while True:
         luck += 2
         user_AC -= 4
         user_SS = 0
+        user_damage = 30
         user_HP += random.randint(20,40)
     else:
         user_crit_chance = [20]
@@ -44,6 +45,7 @@ while True:
         user_HP -= random.randint(2, 12)
     max_HP = user_HP
     max_SS = user_SS
+    print (f"you have {user_STR} strength, {user_DEX} dexterity, {user_HP} health, and {user_AC} Armor class. you have {luck} luck and {user_SS} spell slots")
     while True:
         mon_HP = random.randint(1, difficulty * 2)
         mon_AC = random.randint(8 + int(difficulty / 10), 10 + int(difficulty / 10))
@@ -167,13 +169,19 @@ while True:
             if stat_in == "str":
                 stat_in = random.randint(1,3)
                 print (f"you have increased your strength by {stat_in}")
+                if enemy in boss_names:
+                    stat_in = random.randint (2, 6)
                 user_STR += stat_in
             elif stat_in == "dex":
                 stat_in = random.randint(1,3)
+                if enemy in boss_names:
+                    stat_in = random.randint (2, 6)
                 print (f"you have increased your dexterity by {stat_in}")
                 user_DEX += stat_in
             elif stat_in == "hp":
                 stat_in = random.randint(1,10)
+                if enemy in boss_names:
+                    stat_in = random.randint (2, 6)
                 print  (f"you have increased your health by {stat_in}")
                 user_HP += stat_in
             elif stat_in == "ac":
