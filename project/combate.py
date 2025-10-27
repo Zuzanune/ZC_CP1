@@ -1,5 +1,5 @@
 import random
-enemy_names = ["Goblin", "red sludge", "skeleton", "zombie", "kobald", "wrath", "Boss"]
+enemy_names = ["goblin", "red sludge", "skeleton", "zombie", "kobold", "wrath", "" "Boss"]
 boss_names = ["Death Lord", "Red Dragon", "Champion", "Demon Lord", "Bone Mass", "Goblin boss"]
 while True:
     difficulty = 10
@@ -9,6 +9,7 @@ while True:
     user_STR = random.randint(8, 12)
     user_DEX = random.randint(8, 12)
     user_SS = random.randint(0, 1)
+    luck = 0
     print("Ho there adventurer! what might be your name?")
     user_name = input("> ")
     print("What class might you be?")
@@ -32,7 +33,7 @@ while True:
         user_damage = 6
         user_AC -= 1
         user_DEX += 2
-        user_SS += 7
+        user_SS += 3
         user_HP -= random.randint(2, 12)
     max_HP = user_HP
     max_SS = user_SS
@@ -54,7 +55,7 @@ while True:
         else:
             print(f"An enemy approaches — you spot a {enemy}!\n")
         def userTurn():
-            global user_HP, user_SS, mon_HP, healing_potions
+            global user_HP, user_SS, mon_HP, healing_potions, luck
             print(f"\nYou have {user_HP} HP left.")
             if user_SS > 0:
                 print(f"You also have {user_SS} spell slots left.")
@@ -62,7 +63,7 @@ while True:
             user_action = input("> ").lower()
             if user_action == "attack":
                 print("You attack!!")
-                user_attack = random.randint(1, 20)
+                user_attack = (random.randint(1, 20) + luck)
                 attack_damage = random.randint(1, user_damage) + (user_STR / 2)
                 if user_attack in user_crit_chance:
                     print("You crit!")
@@ -110,7 +111,7 @@ while True:
                     print("You have no healing potions left!")
                     return
                 healing_potions -= 1
-                heal = random.randint(3, 18)
+                heal = random.randint(10, 25)
                 user_HP += heal
                 if user_HP > max_HP:
                     user_HP = max_HP
@@ -121,7 +122,7 @@ while True:
             global user_HP, mon_HP
             if mon_HP <= 0:
                 return
-            print(f"\nThe {enemy} attacks!")
+            print(f"The {enemy} attacks!")
             mon_attack = random.randint(1, 20)+ mon_STR
             if mon_attack > user_AC:
                 damage = random.randint(1, int(mon_DD))
@@ -146,18 +147,42 @@ while True:
             if user_HP <= 0 or mon_HP <= 0:
                 break
         if user_HP <= 0:
-            print("\nYou have fallen in battle... Game over.")
+            print("You have fallen in battle... Game over.")
             break
         else:
-            print(f"\nYou defeated the {enemy}! Victory!")
+            print(f"You defeated the {enemy}! Victory!")
             difficulty += 10
             user_HP = max_HP
             user_SS = max_SS
             healing_potions = 3
-            print(f"\nDifficulty has increased to {difficulty}!")
+            print ("which stat would you like to increase?")
+            stat_in = input("choose STR, DEX, HP, Luck, Spell Slots, or AC\n").lower()
+            if stat_in == "str":
+                stat_in = random.randint(1,3)
+                print (f"you have increased your strength by {stat_in}")
+                user_STR += stat_in
+            elif stat_in == "dex":
+                stat_in = random.randint(1,3)
+                print (f"you have increased your dexterity by {stat_in}")
+                user_DEX += stat_in
+            elif stat_in == "hp":
+                stat_in = random.randint(1,10)
+                print  (f"you have increased your health by {stat_in}")
+                user_HP += stat_in
+            elif stat_in == "ac":
+                print ("you have increased your Armor Class by 1")
+                user_AC += 1
+            elif stat_in == "spell slots" or stat_in == "ss":
+                print ("you have increased your spell slots by one")
+                user_SS += 1
+            else:
+                print ("you have increased your luck by one")
+                luck += 1
+
+            print(f"Difficulty has increased to {difficulty}!")
             cont = input("Continue to the next battle? (y/n): ").lower()
-            if cont != "y":
+            if cont != "y" and "yes":
                 break
     again = input("Would you like to start a new adventure? (y/n): ").lower()
-    if again != "y":
+    if again != "y" or "yes":
         break
