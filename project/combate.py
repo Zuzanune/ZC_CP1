@@ -199,5 +199,5 @@ while True:
             if cont != "y" and "yes":
                 break
     again = input("Would you like to start a new adventure? (y/n): ").lower()
-    if again != "y" or "yes":
+    if again != "y" and "yes":
         break
