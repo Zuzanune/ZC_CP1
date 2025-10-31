@@ -1,5 +1,5 @@
 import random
-enemy_names = ["goblin", "red sludge", "skeleton", "zombie", "kobold", "wrath", "" "Boss"]
+enemy_names = ["goblin", "red sludge", "skeleton", "zombie", "kobold", "wrath", "Kua-Toa", "Boss"]
 boss_names = ["Death Lord", "Red Dragon", "Champion", "Demon Lord", "Bone Mass", "Goblin boss"]
 while True:
     difficulty = 10
@@ -133,7 +133,7 @@ while True:
                 return
             print(f"The {enemy} attacks!")
             mon_attack = random.randint(1, 20)+ mon_STR
-            if mon_attack > user_AC:
+            if mon_attack >= user_AC:
                 damage = random.randint(1, int(mon_DD))
                 user_HP -= damage
                 print(f"The {enemy} hits you for {damage} damage!")
