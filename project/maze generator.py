@@ -25,11 +25,13 @@ maze_grid = [
     [[0,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]],
     [[0,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]],
     [[0,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]],
-    [[1,1,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[0,0,1,0]]]
+    [[1,1,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,1,0]]]
 
 maze = t.Turtle()
 maze.speed(0)
 maze.pensize(2)
+screen = t.Screen()
+screen.tracer(0)
 
 def build_maze():
     square_count = 25
@@ -68,34 +70,98 @@ def build_maze():
             maze.penup()
             maze.teleport(x, y)
 
-            if random.randint(1,3) == 3:
-             #draw top side
+            top = random.randint(1,2)
+            right = random.randint(1,2)
+            bottom = random.randint(1,3)
+            left = random.randint(1,3)
+            if top == 2 and right == 2 and bottom == 2 and left == 2:
+                reset = random.randint(1,4)
+                if reset == 1:
+                    top = 1
+                elif reset == 2:
+                    right = 1
+                elif reset == 3:
+                    bottom = 1
+                else:
+                    left = 1
+                    top
+            if top == 2:
+                #draw top side
                 maze.setheading(0)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
                 for loc in maze_grid:
-                    loc[y][x][3] = 1
+                    maze_grid[row][col][3] = 1
 
-            if random.randint(1,3) == 3:
+            
+            if right == 2:
                 # draw right side
                 maze.setheading(-90)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
+                for loc in maze_grid:
+                    maze_grid[row][col][2] = 1
 
-            if random.randint(1,3) == 3:
+            
+            if bottom == 2:
                 # draw bottom side
                 maze.setheading(180)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
+                for loc in maze_grid:
+                    maze_grid[row][col][0] = 1
 
-            if random.randint(1,3) == 3:
+            
+            if left == 2:
                 # draw left side
                 maze.setheading(90)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
+                for loc in maze_grid:
+                    maze_grid[row][col][1] = 1
+    maze_check_solvability()
+            
+def maze_check_solvability():
+    while True:
+        maze_s = t.Turtle()
+        solve_x = 25 
+        solve_y = -25
+        retry = 10000
+        maze_s.goto(solve_x,solve_y)
+        maze_di = random.randint(1,4)
+        for check in maze_grid[solve_x][solve_y]:
+            retry -= 1
+            if solve_x == -25 and solve_y == 25:
+                win = True
+                break
+            if retry < 0:
+                break
+            if check[0] == 0:
+                bottommo = True
+            if check[1] == 0:
+                leftmo = True
+            if check[2] == 0:
+                rightmo = True
+            if check[3] == 0:
+                topmo = True
+            if bottommo == True and maze_di == 1:
+                solve_y -= 1
+            elif leftmo == True and maze_di == 2:
+                solve_x -= 1
+            elif rightmo == True and maze_di == 3:
+                solve_x += 1
+            elif topmo == True and maze_di == 4:
+                solve_y += 1
+            else:
+                return
+        if win == True:
+            break
+        else:
+            build_maze()
 build_maze()
+screen.update()
 t.done()
