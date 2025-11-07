@@ -64,10 +64,10 @@ def build_maze():
             x = start_x + col * square_size
             y = start_y - row * square_size
             maze.penup()
-            maze.goto(x, y)  # fixed invalid teleport()
+            maze.goto(x, y)
 
-            top = random.randint(1, 2)
-            right = random.randint(1, 2)
+            top = random.randint(1, 3)
+            right = random.randint(1, 3)
             bottom = random.randint(1, 3)
             left = random.randint(1, 3)
 
