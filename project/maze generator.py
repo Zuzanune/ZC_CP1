@@ -26,56 +26,53 @@ maze_grid = [
     [[0,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]],
     [[0,1,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1,0]],
     [[1,1,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,1,0]]]
-
 maze = t.Turtle()
 maze.speed(0)
 maze.pensize(2)
+maze.penup()
+maze.goto(-250, -250)
+maze.pendown()
+maze.forward(480)
+maze.penup()
+maze.forward(20)
+maze.pendown()
+maze.left(90)
+maze.forward(520)
+maze.left(90)
+maze.forward(500)
+maze.penup()
+maze.forward(20)
+maze.pendown()
+maze.left(90)
+maze.forward(520)
+maze.left(90)
+maze.forward(20)
+
 screen = t.Screen()
 screen.tracer(0)
 
 def build_maze():
+    maze.showturtle()
     square_count = 25
     square_size = 20
     start_x = -250
     start_y = 250
 
-    # draw outline of maze
-    maze.penup()
-    maze.goto(-250,-250)
-    maze.pendown()
-    maze.forward(480)
-    maze.penup()
-    maze.forward(20)
-    maze.pendown()
-    maze.left(90)
-    maze.forward(520)
-    maze.left(90)
-    maze.forward(500)
-    maze.penup()
-    maze.forward(20)
-    maze.pendown()
-    maze.left(90)
-    maze.forward(520)
-    maze.left(90)
-    maze.forward(20)
-    
-
-
     # draw each square
     for row in range(square_count):
         for col in range(square_count):
-            #defne square location and size
             x = start_x + col * square_size
             y = start_y - row * square_size
             maze.penup()
-            maze.teleport(x, y)
+            maze.goto(x, y)  # fixed invalid teleport()
 
-            top = random.randint(1,2)
-            right = random.randint(1,2)
-            bottom = random.randint(1,3)
-            left = random.randint(1,3)
+            top = random.randint(1, 2)
+            right = random.randint(1, 2)
+            bottom = random.randint(1, 3)
+            left = random.randint(1, 3)
+
             if top == 2 and right == 2 and bottom == 2 and left == 2:
-                reset = random.randint(1,4)
+                reset = random.randint(1, 4)
                 if reset == 1:
                     top = 1
                 elif reset == 2:
@@ -84,84 +81,79 @@ def build_maze():
                     bottom = 1
                 else:
                     left = 1
-                    top
+
             if top == 2:
-                #draw top side
                 maze.setheading(0)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
-                for loc in maze_grid:
-                    maze_grid[row][col][3] = 1
+                maze_grid[row][col][3] = 1
 
-            
             if right == 2:
-                # draw right side
                 maze.setheading(-90)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
-                for loc in maze_grid:
-                    maze_grid[row][col][2] = 1
+                maze_grid[row][col][2] = 1
 
-            
             if bottom == 2:
-                # draw bottom side
                 maze.setheading(180)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
-                for loc in maze_grid:
-                    maze_grid[row][col][0] = 1
+                maze_grid[row][col][0] = 1
 
-            
             if left == 2:
-                # draw left side
                 maze.setheading(90)
                 maze.pendown()
                 maze.forward(square_size)
                 maze.penup()
-                for loc in maze_grid:
-                    maze_grid[row][col][1] = 1
+                maze_grid[row][col][1] = 1
+
     maze_check_solvability()
-            
+
 def maze_check_solvability():
-    while True:
-        maze_s = t.Turtle()
-        solve_x = 25 
-        solve_y = -25
-        retry = 10000
-        maze_s.goto(solve_x,solve_y)
-        maze_di = random.randint(1,4)
-        for check in maze_grid[solve_x][solve_y]:
-            retry -= 1
-            if solve_x == -25 and solve_y == 25:
-                win = True
-                break
-            if retry < 0:
-                break
-            if check[0] == 0:
-                bottommo = True
-            if check[1] == 0:
-                leftmo = True
-            if check[2] == 0:
-                rightmo = True
-            if check[3] == 0:
-                topmo = True
-            if bottommo == True and maze_di == 1:
-                solve_y -= 1
-            elif leftmo == True and maze_di == 2:
-                solve_x -= 1
-            elif rightmo == True and maze_di == 3:
-                solve_x += 1
-            elif topmo == True and maze_di == 4:
-                solve_y += 1
-            else:
-                return
-        if win == True:
-            break
-        else:
-            build_maze()
+    start_x, start_y = 25, -25
+    goal_x, goal_y = -25, 25
+
+    
+    xsquare, ysquare = 24, 24
+    goal_xsquare, goal_ysquare = 0, 0 
+
+    visited = [[False for _ in range(len(maze_grid[0]))] for _ in range(len(maze_grid))]
+
+    
+    stack = [(xsquare, ysquare)]
+
+    while stack:
+        x, y = stack.pop()
+        if visited[x][y]:
+            continue
+        visited[x][y] = True
+
+        
+        if x == goal_xsquare and y == goal_ysquare:
+            return True  
+        #check if win condition is met
+
+        
+        cell = maze_grid[x][y]
+        bottom, left, right, top = cell
+
+        if bottom == 0 and y + 1 < len(maze_grid[0]) and not visited[x][y + 1]:
+            stack.append((x, y + 1))
+        if left == 0 and x - 1 >= 0 and not visited[x - 1][y]:
+            stack.append((x - 1, y))
+        if right == 0 and x + 1 < len(maze_grid) and not visited[x + 1][y]:
+            stack.append((x + 1, y))
+        if top == 0 and y - 1 >= 0 and not visited[x][y - 1]:
+            stack.append((x, y - 1))
+
+    
+    build_maze()
+    return False
+
+
 build_maze()
 screen.update()
 t.done()
