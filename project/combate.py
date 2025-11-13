@@ -34,8 +34,8 @@ while True:
         luck += 2
         user_AC -= 4
         user_SS = 0
-        user_damage = 30
-        user_HP += random.randint(20,40)
+        user_damage = 20
+        user_HP += random.randint(0,20)
     else:
         user_crit_chance = [20]
         user_damage = 6
@@ -44,6 +44,7 @@ while True:
         user_SS += 3
         user_HP -= random.randint(2, 12)
     max_HP = user_HP
+    user_AC += user_DEX
     max_SS = user_SS
     print (f"you have {user_STR} strength, {user_DEX} dexterity, {user_HP} health, and {user_AC} Armor class. you have {luck} luck and {user_SS} spell slots")
     while True:

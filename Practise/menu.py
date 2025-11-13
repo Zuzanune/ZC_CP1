@@ -31,8 +31,8 @@ while True:
     print (f"total cost: {cost}")
     
     #ask user for a tip of 0% 10% and 30%
-    tip = int(input("please select a tip of $0, $5, $15, or custom"))
-    cost += tip
+    tip = input("please select a tip of $0, $5, $15, or custom:  ")
+    cost += int(tip)
     #display new total and ask for comfirmation
     print(f"your new cost is {cost}")
     print ("please enter all of your bank credentials, including your password, username, and current balance")
