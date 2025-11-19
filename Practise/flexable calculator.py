@@ -8,28 +8,34 @@ def sum(*numbers):
 def product(*numbers):
     total = 1
     for x in numbers:
-        total *= x
+        for h in x:
+            total *= h
     print (total)
 def average(*numbers):
     total = 0.0
     count = 0.0
     for x in numbers:
-        total += x
-        count += 1
-    av = (total/count).round(2)
+        for h in x:
+            total += h
+            count += 1
+    av = (total/count)
+    round(av, 2)
     print (av)
-def min(*numbers):
-    total = min(numbers)
+def bot(*numbers):
+    for x in numbers:
+        total = min(x)
     print (total)
 
-def max(*numbers):
-    total = max(numbers)
+def top(*numbers):
+    for x in numbers:
+        total = max(x)
     print (total)
 
 
 #create while loop for base code
-nums = []
+
 while True:
+    nums = []
     #define how to input equation
     print ("please enter all numbers you wish to proform the operation on(type done when you are done) ")
     while True:
@@ -48,14 +54,10 @@ while True:
     elif asked == "average":
         average([i for i in nums])
     elif asked == "max":
-        max([i for i in nums])
+        top([i for i in nums])
     elif asked == "min":
-        min([i for i in nums])
+        bot([i for i in nums])
     else:
         print ("invalid equation")
         nums = []
     
-
-    #create functions for each equation type
-    #args and kwargs to input all numbers
-    #do equtaion
