@@ -40,7 +40,7 @@ while True:
     print ("please enter all numbers you wish to proform the operation on(type done when you are done) ")
     while True:
         numadd = input()
-        if numadd == "done" or numadd == "Done":
+        if numadd == "done" or numadd == "Done" or numadd == "d":
             break
         else:
             numadd = int(numadd)
