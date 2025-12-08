@@ -34,7 +34,7 @@ The village is a patchwork of crumbled stone, crooked huts, and stubborn shrubs 
 A thin mist curls around your feet. 
 For a moment you stand there uncertain, an outsider washed up in a place where even the buildings look lost."""
 ]
-Monsters = { "Goblin" : {"health" : 11, "AC" : 10, "Damage" : 6}, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "Damage" : 10},  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 75, "AC" : 15, "damage": 8, "exdamage" : 20, "undead" : True} }
+Monsters = { "Goblin" : {"health" : 11, "AC" : 10, "Damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "Damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 75, "AC" : 15, "damage": 8, "exdamage" : 20, "undead" : True} }
 Enemies = ["goblin","goblin", "skeleton", "skeleton", "ochre jelly","zombie","zombie"]
 weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 12, "staff" : 4, "fists" : 1, "sword of light" : 6}
 weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1, "sword of light" : 3}
@@ -45,7 +45,7 @@ player_CHA = r.randint(-1,2)
 player_AC = 10
 player_HP = 9
 gold = r.randint(30,50)
-user_SS = r.randint(0,1)
+player_SS = r.randint(0,1)
 player_crit_roll = [20]
 inventory = []
 healing_potions = 2
@@ -93,6 +93,7 @@ elif clask == "barbarian":
     player_AC += round(player_STR/2, 1)
 player_AC += player_DEX
 player_SS = player_INT
+max_HP = player_HP
 if player_SS < 0:
     player_SS = 0
 if player_STR >= player_DEX:
@@ -116,6 +117,7 @@ for x in inventory:
 print (f"{gold} GP")
 def village():
     print (r.choice(descriptions))
+    global player_HP, max_HP, gold, healing_potions, inventory
     while True:
         
         print ("you have 4 choices. you can go to dungeon, shop, talk, or rest")
@@ -137,8 +139,116 @@ def village():
                     continue
                 if shopchoice == "healing potion":
                     healing_potions += 1
+                    gold -= shop_list.get(shopchoice)
                 elif shopchoice == "chainmail":
+                    print ("the chainmail has been automaticly equiped")
                     player_AC == 15 + player_DEX
+                    gold -= shop_list.get(shopchoice)
+                elif shopchoice == "greatsword":
+                    inventory.append("greatsword")
+                    gold -= shop_list.get(shopchoice)
+                elif shopchoice == "key":
+                    inventory.append("key")
+                    gold -= shop_list.get(shopchoice)
+        elif villchoice == "talk":
+            print(f"you ask around about any strange matters and eventually a passerby speaks up :\"{r.choice(talking)}\" ")
+        elif villchoice == "rest":
+            player_HP = max_HP
+def r_monster():
+    chance = 4
+    guess = r.randint(1,4)
+    if guess == chance:
+        return True
+    else:
+        return False
+def battle(enemy):
+    enemy = r.choice(Enemies)
+    enemy_HP = Enemies[enemy]["health"]
+    enemy_AC = Enemies[enemy]["AC"]
+    enemy_damage = Enemies[enemy]["damage"]
+    is_undead = Enemies[enemy]["undead"]
+    print (f"you spot a {enemy} ahead!")
+    ini = (r.randint(1,20) + player_DEX)
+    if ini > (r.randint(1,20) + r.randint(-1,4)):
+        Turn = 1
+    else:
+        Turn = 2
+    while True:
+        if Turn == 1:
+            print ("it is your turn!")
+            print (f"""your stats are as follows:
+            you have {player_HP} health
+            you have {player_SS} spell slots""")
+            print ("your inventory is as follows")
+            for x in inventory:
+                print (x)
+            while True:
+                print ("you have 3 options. you can attack, cast spell, or drink a healing potion(attack, spell, heal)")
+                battle_choice = input().strip().lower()
+                if battle_choice not in ["attack", "spell", "heal"]:
+                    print ("that is not a valid command")
+                    continue
+                else:
+                    break
+            if battle_choice == "attack":
+                while True:
+                    print ("what weapon are you attacking with")
+                    w_choice = input().lower().strip()
+                    if w_choice not in inventory:
+                        print ("that is not a valid weapon")
+                        continue
+                    break
+                weapon_d = weapon_damage_die[w_choice]
+                weapon_dd = weapon_damage_die_amounts[w_choice]
+                attack_roll = (r.randint(1,20) + primary_ability)
+                if attack_roll == (20 + primary_ability) or (is_undead and w_choice == "sword of light"):
+                    print ("you crit!")
+                    bonus = 2
+                else:
+                    bonus = 1
+                if attack_roll >= enemy_AC:
+                    damage = r.randint(1, weapon_d)
+                    for x in range(weapon_dd-1):
+                        damage += r.randint(1, weapon_d)
+                    damage *= bonus
+                    damage += primary_ability
+                    print (f"you hit! you deal {damage} damage to the enemy")
+            if battle_choice == "spell":
+                if player_SS <= 0:
+                    print("You don't have any spell slots left!")
+                    return
+                print("Choose a spell: Fireball(2), Cure Wounds(1), Magic Missile(1), or Thunderwave(0–1)")
+                spell_choice = input("> ").lower()
+                if spell_choice == "fireball" and player_SS >= 2:
+                    player_SS -= 2
+                    attack_damage = r.randint(8, 30)
+                    print(f"You hurl a fireball! The {enemy} takes {attack_damage} damage!")
+                    
+                elif spell_choice == "cure wounds" and player_SS >= 1:
+                    player_SS -= 1
+                    heal = r.randint(2, 16)
+                    player_HP += heal
+                    if player_HP > max_HP:
+                        player_HP = max_HP
+                    print(f"You cast Cure Wounds and regain {heal} HP! ({player_HP}/{max_HP})")
+                elif spell_choice == "magic missile" and player_SS >= 1:
+                    player_SS -= 1
+                    damage = r.randint(4, 24)
+                    enemy_HP -= damage
+                    print(f"Magic missiles strike the {enemy} for {damage} damage!")
+                elif spell_choice == "thunderwave":
+                    player_SS -= r.randint(0, 1)
+                    damage = r.randint(2, 12)
+                    enemy_HP -= damage
+                    print(f"You cast Thunderwave! The {enemy} takes {damage} damage!")
+                else:
+                    print("You don't have enough spell slots or failed to cast the spell")
+
+                    
+
+
+
+
 
 
 
