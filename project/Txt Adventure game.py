@@ -34,7 +34,7 @@ The village is a patchwork of crumbled stone, crooked huts, and stubborn shrubs 
 A thin mist curls around your feet. 
 For a moment you stand there uncertain, an outsider washed up in a place where even the buildings look lost."""
 ]
-Monsters = { "Goblin" : {"health" : 11, "AC" : 10, "Damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "Damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 75, "AC" : 15, "damage": 8, "exdamage" : 20, "undead" : True} }
+Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 75, "AC" : 15, "damage": 8, "exdamage" : 20, "undead" : True} }
 Enemies = ["goblin","goblin", "skeleton", "skeleton", "ochre jelly","zombie","zombie"]
 weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 12, "staff" : 4, "fists" : 1, "sword of light" : 6}
 weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1, "sword of light" : 3}
@@ -161,12 +161,14 @@ def r_monster():
         return True
     else:
         return False
-def battle(enemy):
+def battle():
+    global player_HP, max_HP, gold, healing_potions, inventory, player_AC, player_CHA, player_AC, player_DEX, player_SS, primary_ability
     enemy = r.choice(Enemies)
-    enemy_HP = Enemies[enemy]["health"]
-    enemy_AC = Enemies[enemy]["AC"]
-    enemy_damage = Enemies[enemy]["damage"]
-    is_undead = Enemies[enemy]["undead"]
+    enemy_HP = Monsters[enemy]["health"]
+    enemy_max_hp = enemy_HP
+    enemy_AC = Monsters[enemy]["AC"]
+    enemy_damage = Monsters[enemy]["damage"]
+    is_undead = Monsters[enemy]["undead"]
     print (f"you spot a {enemy} ahead!")
     ini = (r.randint(1,20) + player_DEX)
     if ini > (r.randint(1,20) + r.randint(-1,4)):
@@ -243,19 +245,75 @@ def battle(enemy):
                     print(f"You cast Thunderwave! The {enemy} takes {damage} damage!")
                 else:
                     print("You don't have enough spell slots or failed to cast the spell")
-
-                    
-
-
-
-
-
-
-
-
-
-
-
+            if battle_choice == "heal":
+                healing_potions -= 1
+                health_regain = r.randint(4,16)
+                player_HP += health_regain
+                if player_HP > max_HP:
+                    player_HP = max_HP
+                print (f"you guzzle down a healing potion and regain {health_regain} health")
+            Turn == 2
+            
+        if Turn == 2:
+            if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
+                print ("the monster runs away, clutching its wounds")
+                run = True
+                break
+            print(f"The {enemy} attacks!")
+            mon_attack = r.randint(1, 20)+ r.randint(1,5)
+            if mon_attack >= player_AC:
+                damage = r.randint(1, enemy_damage)
+                player_HP -= damage
+                print(f"The {enemy} hits you for {damage} damage!")
+            else:
+                print(f"The {enemy} misses!")
+            Turn = 1
+    if not run and enemy_HP < 0:
+        print ("you have defeated the monster! you level up!")
+        stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
+        if stat_in == "str":
+            stat_in = r.randint(1,3)
+            print (f"you have increased your strength by {stat_in}")
+            if enemy == "death knight":
+                stat_in = r.randint (2, 6)
+            player_STR += stat_in
+        elif stat_in == "dex":
+            stat_in = r.randint(1,3)
+            if enemy == "death knight":
+                stat_in = r.randint (2, 6)
+            print (f"you have increased your dexterity by {stat_in}")
+            player_DEX += stat_in
+        elif stat_in == "hp":
+            stat_in = r.randint(1,10)
+            if enemy == "death knight":
+                stat_in = r.randint (2, 6)
+            print  (f"you have increased your health by {stat_in}")
+            player_HP += stat_in
+        elif stat_in == "ac":
+            print ("you have increased your Armor Class by 1")
+            player_AC += 1
+        elif stat_in == "spell slots" or stat_in == "ss":
+            print ("you have increased your spell slots by one")
+            player_SS += 1
+        max_HP = player_HP
+        if player_SS < 0:
+            player_SS = 0
+        if player_STR >= player_DEX:
+            primary_ability = player_STR
+        else:
+            primary_ability = player_DEX
+    if player_HP < 0:
+        print ("you have been slain.")
+        for x in range(10):
+            print ("\n")
+            SystemExit()
     
+            
 
+        
+            
+            
+            
 
+            
+battle()
