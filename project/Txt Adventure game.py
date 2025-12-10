@@ -44,6 +44,9 @@ player_INT = r.randint(-1,2)
 player_CHA = r.randint(-1,2)
 player_AC = 10
 player_HP = 9
+first_chest_stat = True
+dining_longsword = True
+empty_ambush = True
 gold = r.randint(30,50)
 player_SS = r.randint(0,1)
 player_crit_roll = [20]
@@ -307,8 +310,119 @@ def battle():
         for x in range(10):
             print ("\n")
             SystemExit()
+def entry():
+    print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
+           There is a door to your left, a passage to your right, and a door in front of you. 
+           Behind you is a stairway leading to the surface.""")
+    if r_monster() == True:
+        battle()
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("which direction? left, right, forward, or back:  ")
+            if move_direction == "left":
+                dining()
+            elif move_direction == "right":
+                storage()
+            elif move_direction == "forward":
+                hall()
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            if examine_roll > 17 and first_chest_stat:
+                print ("you find a chest hidden in a bundle of spiderwebs! inside is two healing potions")
+                healing_potions += 2
+                first_chest_stat = False
+            else:
+                print ("you dont find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle()
+            else:
+                print ("nothing comes however")
+def dining():
+    print (""" you step into a large room with a fancy wooden table. some old bread still sits on a tray at the center
+           to your right is a door, to your left is a passage, and in front of you is a wooden door""")
+    if r_monster() == True:
+        battle()
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("which direction? left, right, or forward:  ")
+            if move_direction == "left":
+                kitchen()
+            elif move_direction == "right":
+                entry()
+            elif move_direction == "forward":
+                empty()
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            if examine_roll > 12 and dining_longsword:
+                print ("hanging on the wall is a longsword and whetstone as decoration. you take it down and sharpen the blade")
+                healing_potions += 2
+                dining_longsword = False
+                inventory.append("longsword")
+            else:
+                print ("you dont find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle()
+            else:
+                print ("nothing comes however")
+def hall():
+    print (""" you step into a grand hall. three doors lead away from the hall
+           one door is forward
+           one passage is to your left
+           one door is behind you""")
+    if r_monster() == True:
+        battle()
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("which direction? left, forward, or back")
+            if move_direction == "left":
+                training()
+            elif move_direction == "back":
+                entry()
+            elif move_direction == "forward":
+                guard()
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            print ("you dont find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle()
+            else:
+                print ("nothing comes however")
+def empty():
+    print ("""you step into a dark room filled with spiderwebs. there is only one door behind you.""")
+    if empty_ambush:
+        battle()
+        battle()
+    else:
+        if r_monster() == True:
+            battle()
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("the only way is back:  ")
+            if move_direction == "back":
+                entry()
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            if examine_roll > 8:
+                print ("you find a single healing potion, problanly left by those monsters for an emergency")
+            else:
+                print ("you cant find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle()
+            else:
+                print ("nothing comes however")
     
-            
 
         
             
