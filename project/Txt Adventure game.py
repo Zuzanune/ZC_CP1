@@ -34,7 +34,7 @@ The village is a patchwork of crumbled stone, crooked huts, and stubborn shrubs 
 A thin mist curls around your feet. 
 For a moment you stand there uncertain, an outsider washed up in a place where even the buildings look lost."""
 ]
-Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 75, "AC" : 15, "damage": 8, "exdamage" : 20, "undead" : True} }
+Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 100, "AC" : 15, "damage": 12, "undead" : True} }
 Enemies = ["goblin","goblin", "skeleton", "skeleton", "ochre jelly","zombie","zombie"]
 weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 12, "staff" : 4, "fists" : 1, "sword of light" : 6}
 weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1, "sword of light" : 3}
@@ -47,11 +47,14 @@ player_HP = 9
 first_chest_stat = True
 dining_longsword = True
 empty_ambush = True
+guard_encounter = True
+TaSS = True
 gold = r.randint(30,50)
 player_SS = r.randint(0,1)
 player_crit_roll = [20]
 inventory = []
 healing_potions = 2
+global player_AC,  player_CHA, player_crit_roll, player_DEX, player_HP, player_INT, player_HP, player_STR
 print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to cull the lich. what is your name?\"")
 nask = input()
 print (f"""\"{nask}. I am Lorin, the head guard of this town\"
@@ -126,12 +129,13 @@ def village():
         print ("you have 4 choices. you can go to dungeon, shop, talk, or rest")
         villchoice = input("(select dungeon, shop, talk, or rest):  ")
         if villchoice == "shop":
-            shop_list = {"healing potion" : 10, "chain mail" : 35, "greatsword" : 25, "key" : 20}
+            shop_list = {"healing potion" : 10, "chain mail" : 35, "greatsword" : 25}
             options = ["healing potion", "chain mail", "greatsword", "key"]
             print ("the shop has healing potions, sets of chainmail, a greatsword, and a strange key")
             print ("""the shopkeeper, a gruff looking woman with her hand on a dagger, looks at you expenctantly.
-               \"so, are you just here to look, or are you going to buy something\"""")
-            shopchoice = input("type healing potion, chain mail, greatsword, or key").strip().lower()
+               \"so, are you just here to look, or are you going to buy something\"
+                   our healing potions are 10, our chainmail is 35, we have a greatsword for 25""")
+            shopchoice = input("type healing potion, chain mail, greatsword, or key \n").strip().lower()
             if shopchoice not in options:
                 print (f" i dont think we sell {shopchoice}")
                 continue
@@ -143,7 +147,7 @@ def village():
                 if shopchoice == "healing potion":
                     healing_potions += 1
                     gold -= shop_list.get(shopchoice)
-                elif shopchoice == "chainmail":
+                elif shopchoice == "chain mail":
                     print ("the chainmail has been automaticly equiped")
                     player_AC == 15 + player_DEX
                     gold -= shop_list.get(shopchoice)
@@ -156,7 +160,11 @@ def village():
         elif villchoice == "talk":
             print(f"you ask around about any strange matters and eventually a passerby speaks up :\"{r.choice(talking)}\" ")
         elif villchoice == "rest":
+            print ("you find a nice inn to spend the night")
             player_HP = max_HP
+        else:
+            print ("you set off toward the keep in the distance")
+            entry()
 def r_monster():
     chance = 4
     guess = r.randint(1,4)
@@ -164,21 +172,28 @@ def r_monster():
         return True
     else:
         return False
-def battle():
+def battle(boss):
     global player_HP, max_HP, gold, healing_potions, inventory, player_AC, player_CHA, player_AC, player_DEX, player_SS, primary_ability
     enemy = r.choice(Enemies)
     enemy_HP = Monsters[enemy]["health"]
-    enemy_max_hp = enemy_HP
     enemy_AC = Monsters[enemy]["AC"]
     enemy_damage = Monsters[enemy]["damage"]
     is_undead = Monsters[enemy]["undead"]
+    if boss:
+        enemy = "Veyzrath"
+        enemy_HP = Monsters[enemy]["health"]
+        enemy_AC = Monsters[enemy]["AC"]
+        enemy_damage = Monsters[enemy]["damage"]
+        is_undead = Monsters[enemy]["undead"]
     print (f"you spot a {enemy} ahead!")
     ini = (r.randint(1,20) + player_DEX)
     if ini > (r.randint(1,20) + r.randint(-1,4)):
+
         Turn = 1
     else:
         Turn = 2
     while True:
+        run = False
         if Turn == 1:
             print ("it is your turn!")
             print (f"""your stats are as follows:
@@ -211,13 +226,14 @@ def battle():
                     bonus = 2
                 else:
                     bonus = 1
-                if attack_roll >= enemy_AC:
+                if attack_roll >= enemy_AC or bonus == 2:
                     damage = r.randint(1, weapon_d)
                     for x in range(weapon_dd-1):
                         damage += r.randint(1, weapon_d)
                     damage *= bonus
                     damage += primary_ability
                     print (f"you hit! you deal {damage} damage to the enemy")
+                    enemy_HP -= damage
             if battle_choice == "spell":
                 if player_SS <= 0:
                     print("You don't have any spell slots left!")
@@ -255,7 +271,7 @@ def battle():
                 if player_HP > max_HP:
                     player_HP = max_HP
                 print (f"you guzzle down a healing potion and regain {health_regain} health")
-            Turn == 2
+            Turn = 2
             
         if Turn == 2:
             if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
@@ -271,61 +287,63 @@ def battle():
             else:
                 print(f"The {enemy} misses!")
             Turn = 1
-    if not run and enemy_HP < 0:
-        print ("you have defeated the monster! you level up!")
-        stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
-        if stat_in == "str":
-            stat_in = r.randint(1,3)
-            print (f"you have increased your strength by {stat_in}")
-            if enemy == "death knight":
-                stat_in = r.randint (2, 6)
-            player_STR += stat_in
-        elif stat_in == "dex":
-            stat_in = r.randint(1,3)
-            if enemy == "death knight":
-                stat_in = r.randint (2, 6)
-            print (f"you have increased your dexterity by {stat_in}")
-            player_DEX += stat_in
-        elif stat_in == "hp":
-            stat_in = r.randint(1,10)
-            if enemy == "death knight":
-                stat_in = r.randint (2, 6)
-            print  (f"you have increased your health by {stat_in}")
-            player_HP += stat_in
-        elif stat_in == "ac":
-            print ("you have increased your Armor Class by 1")
-            player_AC += 1
-        elif stat_in == "spell slots" or stat_in == "ss":
-            print ("you have increased your spell slots by one")
-            player_SS += 1
-        max_HP = player_HP
-        if player_SS < 0:
-            player_SS = 0
-        if player_STR >= player_DEX:
-            primary_ability = player_STR
-        else:
-            primary_ability = player_DEX
+        if not run and enemy_HP < 0:
+            print ("you have defeated the monster! you level up!")
+            stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
+            if stat_in == "str":
+                stat_in = r.randint(1,3)
+                print (f"you have increased your strength by {stat_in}")
+                if enemy == "death knight":
+                    stat_in = r.randint (2, 6)
+                player_STR += stat_in
+            elif stat_in == "dex":
+                stat_in = r.randint(1,3)
+                if enemy == "death knight":
+                    stat_in = r.randint (2, 6)
+                print (f"you have increased your dexterity by {stat_in}")
+                player_DEX += stat_in
+            elif stat_in == "hp":
+                stat_in = r.randint(1,10)
+                if enemy == "death knight":
+                    stat_in = r.randint (2, 6)
+                print  (f"you have increased your health by {stat_in}")
+                player_HP += stat_in
+            elif stat_in == "ac":
+                print ("you have increased your Armor Class by 1")
+                player_AC += 1
+            elif stat_in == "spell slots" or stat_in == "ss":
+                print ("you have increased your spell slots by one")
+                player_SS += 1
+            max_HP = player_HP
+            if player_SS < 0:
+                player_SS = 0
+            if player_STR >= player_DEX:
+                primary_ability = player_STR
+            else:
+                primary_ability = player_DEX
+            break
     if player_HP < 0:
         print ("you have been slain.")
         for x in range(10):
             print ("\n")
             SystemExit()
 def entry():
+    global first_chest_stat
     print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
-           There is a door to your left, a passage to your right, and a door in front of you. 
+           There is a door to your left, and a door in front of you. 
            Behind you is a stairway leading to the surface.""")
     if r_monster() == True:
-        battle()
+        battle(False)
     while True:
         room_option = input("move, examine, or yell?  ").strip().lower()
         if room_option == "move":
-            move_direction = input("which direction? left, right, forward, or back:  ")
+            move_direction = input("which direction? left, forward, or back:  ")
             if move_direction == "left":
                 dining()
-            elif move_direction == "right":
-                storage()
             elif move_direction == "forward":
                 hall()
+            elif move_direction == "back":
+                village
         elif room_option == "examine":
             examine_roll = (r.randint(1,20) + player_INT)
             if examine_roll > 17 and first_chest_stat:
@@ -337,21 +355,20 @@ def entry():
         elif room_option == "yell":
             print ("you yell very loudly for some reason")
             if r_monster() == True:
-                battle()
+                battle(False)
             else:
                 print ("nothing comes however")
 def dining():
+    global dining_longsword
     print (""" you step into a large room with a fancy wooden table. some old bread still sits on a tray at the center
            to your right is a door, to your left is a passage, and in front of you is a wooden door""")
     if r_monster() == True:
-        battle()
+        battle(False)
     while True:
         room_option = input("move, examine, or yell?  ").strip().lower()
         if room_option == "move":
-            move_direction = input("which direction? left, right, or forward:  ")
-            if move_direction == "left":
-                kitchen()
-            elif move_direction == "right":
+            move_direction = input("which direction?  right, or forward:  ")
+            if move_direction == "right":
                 entry()
             elif move_direction == "forward":
                 empty()
@@ -367,7 +384,7 @@ def dining():
         elif room_option == "yell":
             print ("you yell very loudly for some reason")
             if r_monster() == True:
-                battle()
+                battle(False)
             else:
                 print ("nothing comes however")
 def hall():
@@ -375,8 +392,9 @@ def hall():
            one door is forward
            one passage is to your left
            one door is behind you""")
+    
     if r_monster() == True:
-        battle()
+        battle(False)
     while True:
         room_option = input("move, examine, or yell?  ").strip().lower()
         if room_option == "move":
@@ -393,23 +411,24 @@ def hall():
         elif room_option == "yell":
             print ("you yell very loudly for some reason")
             if r_monster() == True:
-                battle()
+                battle(False)
             else:
                 print ("nothing comes however")
 def empty():
+    global healing_potions
     print ("""you step into a dark room filled with spiderwebs. there is only one door behind you.""")
     if empty_ambush:
-        battle()
-        battle()
+        battle(False)
+        battle(False)
     else:
         if r_monster() == True:
-            battle()
+            battle(False)
     while True:
         room_option = input("move, examine, or yell?  ").strip().lower()
         if room_option == "move":
             move_direction = input("the only way is back:  ")
             if move_direction == "back":
-                entry()
+                dining()
         elif room_option == "examine":
             examine_roll = (r.randint(1,20) + player_INT)
             if examine_roll > 8:
@@ -419,15 +438,69 @@ def empty():
         elif room_option == "yell":
             print ("you yell very loudly for some reason")
             if r_monster() == True:
-                battle()
+                battle(False)
             else:
                 print ("nothing comes however")
-    
+def training():
+    global TaSS
+    print ("you walk into a decripted training yard. there is one door to your right")
+    if r_monster() == True:
+        battle(False)
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("the only way is right:  ")
+            if move_direction == "right":
+                hall()
+            else:
+                print ('that is not a valid direction')
+                continue
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            if examine_roll > 8 and TaSS:
+                print ("you find a shortsword in a closet")
+                inventory.append("shortsword")
+            else:
+                print ("you do not find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle(False)
+            else:
+                print ("nothing comes")
+def guard():
+    global healing_potions
+    print ("you walk into a guard chamber. there is one door forward and one back")
+    if r_monster() == True:
+        battle(False)
+    while True:
+        room_option = input("move, examine, or yell?  ").strip().lower()
+        if room_option == "move":
+            move_direction = input("the only way is right:  ")
+            if move_direction == "right":
+                hall()
+            else:
+                print ('that is not a valid direction')
+                continue
+        elif room_option == "examine":
+            examine_roll = (r.randint(1,20) + player_INT)
+            if examine_roll > 8:
+                print ("you find a single healing potion, problanly left by those monsters for an emergency")
+                healing_potions += 1
+            else:
+                print ("you cant find anything")
+        elif room_option == "yell":
+            print ("you yell very loudly for some reason")
+            if r_monster() == True:
+                battle(False)
+            else:
+                print ("nothing comes")
+def throne():
+    print ("""you walk into a large room. a figure stands in the center. clothed in black robes" \
+    " the figure raises a skeletal hand towards you." \
+    " it seems you have reached your destination...""")
+    battle(True)
+    print ("you strike the final blow. veyzraths crumples to the ground before vanishing in a puff of mist")
+    print ("you have defeated the mighty veyzrath and saved the village!")
 
-        
-            
-            
-            
-
-            
-battle()
+village()
