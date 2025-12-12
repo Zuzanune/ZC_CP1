@@ -1,5 +1,6 @@
 #ZC 1st Finals text adventure game
 import random as r
+import time as t
 talking = [
     'Did you hear it last night? That cold wind from the old keep… I swear it carried whispers again.',
     'If the lich really has awoken, then the council better do something soon. My chickens haven\'t laid a normal egg in days.',
@@ -54,7 +55,6 @@ player_SS = r.randint(0,1)
 player_crit_roll = [20]
 inventory = []
 healing_potions = 2
-global player_AC,  player_CHA, player_crit_roll, player_DEX, player_HP, player_INT, player_HP, player_STR
 print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to cull the lich. what is your name?\"")
 nask = input()
 print (f"""\"{nask}. I am Lorin, the head guard of this town\"
@@ -106,7 +106,7 @@ if player_STR >= player_DEX:
     primary_ability = player_STR
 else:
     primary_ability = player_DEX
-print (f"\"nice to meet you, {nask}. I hope you will free our small town from the horrible Veyzrath\"")
+print (f"\"nice to meet you, {nask}. I hope you will free our small town from the horrible Veyzrath\" \n{t.sleep(0.5)} i want to give you a idea of the dungeon shape. if you just continue forward, you will reach veyzraths throne hall \n,{t.sleep(1)} but i would recomend gaining experience by defeating his minions and searching for loot.")
 print (f"""your stats are as follows:
             your adventurers name is {nask}
             their class is {clask}
@@ -121,6 +121,7 @@ print ("inventory:")
 for x in inventory:
     print (x)
 print (f"{gold} GP")
+t.sleep(0.3)
 def village():
     print (r.choice(descriptions))
     global player_HP, max_HP, gold, healing_potions, inventory
@@ -131,11 +132,11 @@ def village():
         if villchoice == "shop":
             shop_list = {"healing potion" : 10, "chain mail" : 35, "greatsword" : 25}
             options = ["healing potion", "chain mail", "greatsword", "key"]
-            print ("the shop has healing potions, sets of chainmail, a greatsword, and a strange key")
+            print ("the shop has healing potions, sets of chainmail, and a greatsword")
             print ("""the shopkeeper, a gruff looking woman with her hand on a dagger, looks at you expenctantly.
                \"so, are you just here to look, or are you going to buy something\"
                    our healing potions are 10, our chainmail is 35, we have a greatsword for 25""")
-            shopchoice = input("type healing potion, chain mail, greatsword, or key \n").strip().lower()
+            shopchoice = input("type healing potion, chain mail, or greatsword \n").strip().lower()
             if shopchoice not in options:
                 print (f" i dont think we sell {shopchoice}")
                 continue
@@ -147,8 +148,9 @@ def village():
                 if shopchoice == "healing potion":
                     healing_potions += 1
                     gold -= shop_list.get(shopchoice)
+                    print ("you purchace a healing potion")
                 elif shopchoice == "chain mail":
-                    print ("the chainmail has been automaticly equiped")
+                    print ("you purchase the chainmail. it has been automaticly equiped")
                     player_AC == 15 + player_DEX
                     gold -= shop_list.get(shopchoice)
                 elif shopchoice == "greatsword":
@@ -173,7 +175,7 @@ def r_monster():
     else:
         return False
 def battle(boss):
-    global player_HP, max_HP, gold, healing_potions, inventory, player_AC, player_CHA, player_AC, player_DEX, player_SS, primary_ability
+    global player_HP, max_HP, gold, healing_potions, inventory, player_AC, player_CHA, player_AC, player_DEX, player_SS, primary_ability, player_STR
     enemy = r.choice(Enemies)
     enemy_HP = Monsters[enemy]["health"]
     enemy_AC = Monsters[enemy]["AC"]
@@ -237,7 +239,6 @@ def battle(boss):
             if battle_choice == "spell":
                 if player_SS <= 0:
                     print("You don't have any spell slots left!")
-                    return
                 print("Choose a spell: Fireball(2), Cure Wounds(1), Magic Missile(1), or Thunderwave(0–1)")
                 spell_choice = input("> ").lower()
                 if spell_choice == "fireball" and player_SS >= 2:
@@ -272,21 +273,6 @@ def battle(boss):
                     player_HP = max_HP
                 print (f"you guzzle down a healing potion and regain {health_regain} health")
             Turn = 2
-            
-        if Turn == 2:
-            if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
-                print ("the monster runs away, clutching its wounds")
-                run = True
-                break
-            print(f"The {enemy} attacks!")
-            mon_attack = r.randint(1, 20)+ r.randint(1,5)
-            if mon_attack >= player_AC:
-                damage = r.randint(1, enemy_damage)
-                player_HP -= damage
-                print(f"The {enemy} hits you for {damage} damage!")
-            else:
-                print(f"The {enemy} misses!")
-            Turn = 1
         if not run and enemy_HP < 0:
             print ("you have defeated the monster! you level up!")
             stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
@@ -321,14 +307,30 @@ def battle(boss):
                 primary_ability = player_STR
             else:
                 primary_ability = player_DEX
-            break
+                
+            break   
+        if Turn == 2:
+            if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
+                print ("the monster runs away, clutching its wounds")
+                run = True
+                break
+            print(f"The {enemy} attacks!")
+            mon_attack = r.randint(1, 20)+ r.randint(1,5)
+            if mon_attack >= player_AC:
+                damage = r.randint(1, enemy_damage)
+                player_HP -= damage
+                print(f"The {enemy} hits you for {damage} damage!")
+            else:
+                print(f"The {enemy} misses!")
+            Turn = 1
+        
     if player_HP < 0:
         print ("you have been slain.")
         for x in range(10):
             print ("\n")
             SystemExit()
 def entry():
-    global first_chest_stat
+    global first_chest_stat, healing_potions
     print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
            There is a door to your left, and a door in front of you. 
            Behind you is a stairway leading to the surface.""")
@@ -343,7 +345,7 @@ def entry():
             elif move_direction == "forward":
                 hall()
             elif move_direction == "back":
-                village
+                village()
         elif room_option == "examine":
             examine_roll = (r.randint(1,20) + player_INT)
             if examine_roll > 17 and first_chest_stat:
@@ -359,7 +361,7 @@ def entry():
             else:
                 print ("nothing comes however")
 def dining():
-    global dining_longsword
+    global dining_longsword, healing_potions
     print (""" you step into a large room with a fancy wooden table. some old bread still sits on a tray at the center
            to your right is a door, to your left is a passage, and in front of you is a wooden door""")
     if r_monster() == True:
@@ -476,16 +478,18 @@ def guard():
     while True:
         room_option = input("move, examine, or yell?  ").strip().lower()
         if room_option == "move":
-            move_direction = input("the only way is right:  ")
-            if move_direction == "right":
+            move_direction = input("you can go forward, or back:  ")
+            if move_direction == "back":
                 hall()
+            elif move_direction == "forward":
+                throne()
             else:
                 print ('that is not a valid direction')
                 continue
         elif room_option == "examine":
             examine_roll = (r.randint(1,20) + player_INT)
             if examine_roll > 8:
-                print ("you find a single healing potion, problanly left by those monsters for an emergency")
+                print ("you find a single healing potion")
                 healing_potions += 1
             else:
                 print ("you cant find anything")
