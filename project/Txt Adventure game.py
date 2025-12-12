@@ -35,7 +35,7 @@ The village is a patchwork of crumbled stone, crooked huts, and stubborn shrubs 
 A thin mist curls around your feet. 
 For a moment you stand there uncertain, an outsider washed up in a place where even the buildings look lost."""
 ]
-Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 100, "AC" : 15, "damage": 12, "undead" : True} }
+Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 125, "AC" : 19, "damage": 12, "undead" : True} }
 Enemies = ["goblin","goblin", "skeleton", "skeleton", "ochre jelly","zombie","zombie"]
 weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 12, "staff" : 4, "fists" : 1, "sword of light" : 6}
 weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1, "sword of light" : 3}
@@ -44,7 +44,7 @@ player_DEX = r.randint(-1,2)
 player_INT = r.randint(-1,2)
 player_CHA = r.randint(-1,2)
 player_AC = 10
-player_HP = 9
+player_HP = 20
 first_chest_stat = True
 dining_longsword = True
 empty_ambush = True
@@ -243,7 +243,7 @@ def battle(boss):
                 spell_choice = input("> ").lower()
                 if spell_choice == "fireball" and player_SS >= 2:
                     player_SS -= 2
-                    attack_damage = r.randint(8, 30)
+                    attack_damage = r.randint(6, 20)
                     print(f"You hurl a fireball! The {enemy} takes {attack_damage} damage!")
                     
                 elif spell_choice == "cure wounds" and player_SS >= 1:
@@ -255,12 +255,12 @@ def battle(boss):
                     print(f"You cast Cure Wounds and regain {heal} HP! ({player_HP}/{max_HP})")
                 elif spell_choice == "magic missile" and player_SS >= 1:
                     player_SS -= 1
-                    damage = r.randint(4, 24)
+                    damage = r.randint(4, 14)
                     enemy_HP -= damage
                     print(f"Magic missiles strike the {enemy} for {damage} damage!")
                 elif spell_choice == "thunderwave":
                     player_SS -= r.randint(0, 1)
-                    damage = r.randint(2, 12)
+                    damage = r.randint(2, 10)
                     enemy_HP -= damage
                     print(f"You cast Thunderwave! The {enemy} takes {damage} damage!")
                 else:
@@ -277,19 +277,19 @@ def battle(boss):
             print ("you have defeated the monster! you level up!")
             stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
             if stat_in == "str":
-                stat_in = r.randint(1,3)
+                stat_in = r.randint(1)
                 print (f"you have increased your strength by {stat_in}")
                 if enemy == "death knight":
                     stat_in = r.randint (2, 6)
                 player_STR += stat_in
             elif stat_in == "dex":
-                stat_in = r.randint(1,3)
+                stat_in = r.randint(1)
                 if enemy == "death knight":
                     stat_in = r.randint (2, 6)
                 print (f"you have increased your dexterity by {stat_in}")
                 player_DEX += stat_in
             elif stat_in == "hp":
-                stat_in = r.randint(1,10)
+                stat_in = r.randint(1,5)
                 if enemy == "death knight":
                     stat_in = r.randint (2, 6)
                 print  (f"you have increased your health by {stat_in}")
@@ -506,5 +506,8 @@ def throne():
     battle(True)
     print ("you strike the final blow. veyzraths crumples to the ground before vanishing in a puff of mist")
     print ("you have defeated the mighty veyzrath and saved the village!")
+    return
+
+
 
 village()
