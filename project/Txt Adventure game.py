@@ -59,14 +59,14 @@ while True:
     inventory = ["fists"]
     healing_potions = 2
     #gold += 100
-    print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to cull the lich. what is your name?\"")
+    print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to kill the lich. what is your name?\"")
     nask = input()
     print (f"""\"{nask}. I am Lorin, the head guard of this town\"
             he rolls his club in his hand \"
             let me give you a quick sumary of our situation. the lich Veyzrath has taken over a small keep and is terrorising the civilians.
             thank you for coming to our humble town. i hope you fare better then the many before you.""")
     print (f"what class of adventurer are you {nask}?")
-    clask = input("choose wizard, fighter, rouge, or barbarian:  ").lower().strip()
+    clask = input("choose wizard, fighter, rogue, or barbarian:  ").lower().strip()
     if clask == "wizard":
         player_STR -= 2
         player_DEX += 1
@@ -84,7 +84,7 @@ while True:
         player_HP += player_STR
         inventory.append("shortsword")
         inventory.append("longsword")
-    elif clask == "rouge":
+    elif clask == "rogue":
         player_STR -= 1
         player_DEX += 6
         player_INT += 1
