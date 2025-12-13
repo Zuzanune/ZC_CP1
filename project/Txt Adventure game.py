@@ -538,14 +538,16 @@ while True:
         win = True
         return
     if win == False:
-        print ("would you like to start the game?")
+        print("would you like to start the game?")
     else:
-        print ("would you like to restart the game?")
-    start = input("(y/n)")
+        print("would you like to restart the game?")
+    start = input("(y/n)").lower().strip()
     if start == "y":
-        continue
+        village()
     else:
+        print("thank you for playing")
         break
+
 print ("thank you for playing")
 print ("this game was made by Zane Carter, 1st period CSP1") 
 
