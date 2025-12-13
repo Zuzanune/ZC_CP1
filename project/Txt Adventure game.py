@@ -20,7 +20,7 @@ while True:
         'If you find yourself hearing bells at midnight… don\'t answer. They say it\'s the lich calling wandering souls.',
         'The apothecary\'s been selling out of courage potions. Shame they\'re just mint tea.']
     descriptions = [
-        """You step into Broken Stones, boots crunching on the uneven cobblestone fragments that give the village its name. 
+        """You step into the small village of Broken Stones, boots crunching on the uneven cobblestone fragments that give the village its name. 
     A cool wind snakes between the leaning timber homes, carrying the smell of woodsmoke and damp earth. 
     Villagers cast you quick, measuring glances—some wary, some hopeful—as if trying to decide whether you’re trouble or salvation.""",
 
@@ -37,10 +37,11 @@ while True:
     A thin mist curls around your feet. 
     For a moment you stand there uncertain, an outsider washed up in a place where even the buildings look lost."""
     ]
-    Monsters = { "goblin" : {"health" : 11, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 15, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 13, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 25, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 125, "AC" : 19, "damage": 12, "undead" : True} }
-    Enemies = ["goblin","goblin", "skeleton", "skeleton", "ochre jelly","zombie","zombie"]
-    weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 12, "staff" : 4, "fists" : 1, "sword of light" : 6}
-    weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1, "sword of light" : 3}
+    Monsters = { "goblin" : {"health" : 15, "AC" : 10, "damage" : 6, "undead" : False }, "skeleton" : {"health" : 20, "AC" : 14, "damage" : 6, "undead" : True},"zombie" : {"health" : 18, "AC" : 11, "damage" : 6, "undead" : True}, "ochre jelly" : {"health" : 35, "AC" : 9, "damage" : 10, "undead" : False },  "undead knight": {"health" : 50, "AC" : 18, "damage" : 12, "undead" : True}, "Veyzrath": {"health" : 150, "AC" : 17, "damage": 12, "undead" : True} }
+    Enemies = ["goblin","goblin", "goblin", "skeleton", "skeleton", "skeleton", "skeleton", "ochre jelly", "ochre jelly","zombie","zombie","zombie","zombie", "undead knight"]
+    weapon_damage_die = {"club" : 4, "dagger" : 4, "shortsword" : 6, "longsword" : 8, "greatsword" : 6, "greataxe" : 10, "staff" : 4, "fists" : 1}
+    weapon_damage_die_amounts = {"club" : 1, "dagger" : 1, "shortsword" : 1, "longsword" : 1, "greatsword" : 2, "greataxe" : 1, "staff" : 1, "fists" : 1}
+    weapon_die_stat = {"club" : "STR", "dagger" : "both", "shortsword" : "both", "longsword" : "STR", "greatsword" : "STR", "greataxe" : "STR", "staff" : "STR", "fists" : "STR"}
     player_STR = r.randint(-1,2)
     player_DEX = r.randint(-1,2)
     player_INT = r.randint(-1,2)
@@ -52,18 +53,19 @@ while True:
     empty_ambush = True
     guard_encounter = True
     TaSS = True
-    gold = r.randint(30,50)
+    gold = r.randint(10, 20)
     player_SS = r.randint(0,1)
     player_crit_roll = [20]
-    inventory = []
+    inventory = ["fists"]
     healing_potions = 2
+    #gold += 100
     print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to cull the lich. what is your name?\"")
     nask = input()
     print (f"""\"{nask}. I am Lorin, the head guard of this town\"
             he rolls his club in his hand \"
             let me give you a quick sumary of our situation. the lich Veyzrath has taken over a small keep and is terrorising the civilians.
             thank you for coming to our humble town. i hope you fare better then the many before you.""")
-    print (f"what class of adventuer are you {nask}?")
+    print (f"what class of adventurer are you {nask}?")
     clask = input("choose wizard, fighter, rouge, or barbarian:  ").lower().strip()
     if clask == "wizard":
         player_STR -= 2
@@ -78,7 +80,7 @@ while True:
         player_DEX += 2
         player_CHA += 2
         player_AC += 2
-        player_HP += 10
+        player_HP += 9
         player_HP += player_STR
         inventory.append("shortsword")
         inventory.append("longsword")
@@ -96,7 +98,7 @@ while True:
         player_DEX -= 1
         player_INT -= 3
         player_CHA += 3
-        player_HP += 20
+        player_HP += 12
         inventory.append("greataxe")
         player_AC += round(player_STR/2, 1)
     player_AC += player_DEX
@@ -108,7 +110,9 @@ while True:
         primary_ability = player_STR
     else:
         primary_ability = player_DEX
-    print (f"\"nice to meet you, {nask}. I hope you will free our small town from the horrible Veyzrath\" \n{t.sleep(0.5)} i want to give you a idea of the dungeon shape. if you just continue forward, you will reach veyzraths throne hall \n,{t.sleep(1)} but i would recomend gaining experience by defeating his minions and searching for loot.")
+    print (f"""\"nice to meet you, {nask}. I hope you will free our small town from the horrible Veyzrath\"
+            i want to give you a idea of the dungeon shape. if you just continue forward, you will reach veyzraths throne hall, 
+           but i would recomend gaining experience by defeating his minions and searching for loot.""")
     print (f"""your stats are as follows:
                 your adventurers name is {nask}
                 their class is {clask}
@@ -151,13 +155,17 @@ while True:
                         healing_potions += 1
                         gold -= shop_list.get(shopchoice)
                         print ("you purchace a healing potion")
+                        print (f"you have {gold} gold left")
                     elif shopchoice == "chain mail":
                         print ("you purchase the chainmail. it has been automaticly equiped")
-                        player_AC == 15 + player_DEX
+                        player_AC = 15 + player_DEX
                         gold -= shop_list.get(shopchoice)
+                        print (f"you have {gold} gold left")
                     elif shopchoice == "greatsword":
                         inventory.append("greatsword")
                         gold -= shop_list.get(shopchoice)
+                        print ("you smile deviously and point at the massive blade hanging on the wall")
+                        print (f"you have {gold} gold left")
                     elif shopchoice == "key":
                         inventory.append("key")
                         gold -= shop_list.get(shopchoice)
@@ -170,8 +178,8 @@ while True:
                 print ("you set off toward the keep in the distance")
                 entry()
     def r_monster():
-        chance = 4
-        guess = r.randint(1,4)
+        chance = 2
+        guess = r.randint(1,3)
         if guess == chance:
             return True
         else:
@@ -223,10 +231,16 @@ while True:
                             continue
                         break
                     weapon_d = weapon_damage_die[w_choice]
+                    thisab = weapon_die_stat[w_choice]
                     weapon_dd = weapon_damage_die_amounts[w_choice]
-                    attack_roll = (r.randint(1,20) + primary_ability)
-                    if attack_roll == (20 + primary_ability) or (is_undead and w_choice == "sword of light"):
-                        print ("you crit!")
+                    if thisab == "STR":
+                        thisab = player_STR
+                    if thisab == "both":
+                        thisab = primary_ability
+                    roll = r.randint(1,20)
+                    attack_roll = roll + thisab
+                    if roll == 20: 
+                        print("you crit!")
                         bonus = 2
                     else:
                         bonus = 1
@@ -236,13 +250,14 @@ while True:
                             damage += r.randint(1, weapon_d)
                         damage *= bonus
                         damage += primary_ability
-                        print (f"you hit! you deal {damage} damage to the enemy")
+                        print (f"you hit! you deal {damage} damage to {enemy}")
                         enemy_HP -= damage
                     else:
                         print ("you miss!")
                 if battle_choice == "spell":
                     if player_SS <= 0:
                         print("You don't have any spell slots left!")
+                        return
                     print("Choose a spell: Fireball(2), Cure Wounds(1), Magic Missile(1), or Thunderwave(0–1)")
                     spell_choice = input("> ").lower()
                     if spell_choice == "fireball" and player_SS >= 2:
@@ -262,7 +277,7 @@ while True:
                         damage = r.randint(4, 14)
                         enemy_HP -= damage
                         print(f"Magic missiles strike.{enemy} takes {damage} damage!")
-                    elif spell_choice == "thunderwave":
+                    elif spell_choice == "thunderwave" and player_SS >= 1:
                         player_SS -= r.randint(0, 1)
                         damage = r.randint(2, 10)
                         enemy_HP -= damage
@@ -277,12 +292,15 @@ while True:
                         player_HP = max_HP
                     print (f"you guzzle down a healing potion and regain {health_regain} health")
                 Turn = 2
-            if not run and enemy_HP < 0:
+            if not run and enemy_HP <= 0:
                 if boss:
                     print ("you have defeated veyzrath")
                     return
                 else:
                     print ("you have defeated the monster! you level up!")
+                    gold_in = r.randint(1,10)
+                    gold += gold_in
+                    print (f"you have gained {gold_in} gold and now have {gold} gold.")
                 stat_in = input("choose STR, DEX, HP, Spell Slots, or AC\n").lower()
                 if stat_in == "str":
                     stat_in = r.randint(1,2)
@@ -291,7 +309,7 @@ while True:
                         stat_in = r.randint (2, 6)
                     player_STR += stat_in
                 elif stat_in == "dex":
-                    stat_in = r.randint(1)
+                    stat_in = 1
                     if enemy == "death knight":
                         stat_in = r.randint (2, 6)
                     print (f"you have increased your dexterity by {stat_in}")
@@ -308,7 +326,8 @@ while True:
                 elif stat_in == "spell slots" or stat_in == "ss":
                     print ("you have increased your spell slots by one")
                     player_SS += 1
-                max_HP = player_HP
+                if player_HP > max_HP:
+                    max_HP = player_HP
                 if player_SS < 0:
                     player_SS = 0
                 if player_STR >= player_DEX:
@@ -336,7 +355,7 @@ while True:
             print ("you have been slain.")
             for x in range(10):
                 print ("\n")
-                SystemExit()
+                return
     def entry():
         global first_chest_stat, healing_potions
         print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
@@ -425,11 +444,12 @@ while True:
                 else:
                     print ("nothing comes however")
     def empty():
-        global healing_potions
+        global healing_potions, empty_ambush
         print ("""you step into a dark room filled with spiderwebs. there is only one door behind you.""")
         if empty_ambush:
             battle(False)
             battle(False)
+            empty_ambush = False
         else:
             if r_monster() == True:
                 battle(False)
@@ -442,7 +462,7 @@ while True:
             elif room_option == "examine":
                 examine_roll = (r.randint(1,20) + player_INT)
                 if examine_roll > 8:
-                    print ("you find a single healing potion, problanly left by those monsters for an emergency")
+                    print ("you find a single healing potion, problably left by those monsters for an emergency")
                 else:
                     print ("you cant find anything")
             elif room_option == "yell":
@@ -508,6 +528,7 @@ while True:
                 else:
                     print ("nothing comes")
     def throne():
+        global win
         print ("""you walk into a large room. a figure stands in the center. clothed in black robes" \
         " the figure raises a skeletal hand towards you." \
         " it seems you have reached your destination...""")
@@ -522,7 +543,7 @@ while True:
         print ("would you like to restart the game?")
     start = input("(y/n)")
     if start == "y":
-        village()
+        continue
     else:
         break
 print ("thank you for playing")
