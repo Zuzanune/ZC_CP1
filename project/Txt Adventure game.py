@@ -334,7 +334,11 @@ while True:
                     primary_ability = player_STR
                 else:
                     primary_ability = player_DEX
-                    
+                return
+            if player_HP <= 0:
+                print ("you have been s lain.")
+                for x in range(10):
+                    print ("\n")
                 break   
             if Turn == 2:
                 if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
@@ -351,11 +355,7 @@ while True:
                     print(f"The {enemy} misses!")
                 Turn = 1
             
-        if player_HP <= 0:
-            print ("you have been slain.")
-            for x in range(10):
-                print ("\n")
-                return
+       
     def entry():
         global first_chest_stat, healing_potions
         print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
@@ -536,6 +536,7 @@ while True:
         print ("you strike the final blow. veyzraths crumples to the ground before vanishing in a puff of mist")
         print ("you have defeated the mighty veyzrath and saved the village!")
         win = True
+        break
         return
     if win == False:
         print("would you like to start the game?")
