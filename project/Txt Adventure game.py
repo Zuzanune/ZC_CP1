@@ -2,7 +2,8 @@
 import random as r
 import time as t
 win = False
-while True:
+
+def main():
     talking = [
         'Did you hear it last night? That cold wind from the old keep… I swear it carried whispers again.',
         'If the lich really has awoken, then the council better do something soon. My chickens haven\'t laid a normal egg in days.',
@@ -59,14 +60,14 @@ while True:
     inventory = ["fists"]
     healing_potions = 2
     #gold += 100
-    print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to kill the lich. what is your name?\"")
+    print (" A gruff man carrying a club walks up to you. \"I hear you are the new aventurer coming to the town to cull the lich. what is your name?\"")
     nask = input()
     print (f"""\"{nask}. I am Lorin, the head guard of this town\"
             he rolls his club in his hand \"
             let me give you a quick sumary of our situation. the lich Veyzrath has taken over a small keep and is terrorising the civilians.
             thank you for coming to our humble town. i hope you fare better then the many before you.""")
     print (f"what class of adventurer are you {nask}?")
-    clask = input("choose wizard, fighter, rogue, or barbarian:  ").lower().strip()
+    clask = input("choose wizard, fighter, rouge, or barbarian:  ").lower().strip()
     if clask == "wizard":
         player_STR -= 2
         player_DEX += 1
@@ -84,7 +85,7 @@ while True:
         player_HP += player_STR
         inventory.append("shortsword")
         inventory.append("longsword")
-    elif clask == "rogue":
+    elif clask == "rouge":
         player_STR -= 1
         player_DEX += 6
         player_INT += 1
@@ -112,7 +113,7 @@ while True:
         primary_ability = player_DEX
     print (f"""\"nice to meet you, {nask}. I hope you will free our small town from the horrible Veyzrath\"
             i want to give you a idea of the dungeon shape. if you just continue forward, you will reach veyzraths throne hall, 
-           but i would recomend gaining experience by defeating his minions and searching for loot.""")
+        but i would recomend gaining experience by defeating his minions and searching for loot.""")
     print (f"""your stats are as follows:
                 your adventurers name is {nask}
                 their class is {clask}
@@ -140,8 +141,8 @@ while True:
                 options = ["healing potion", "chain mail", "greatsword", "key"]
                 print ("the shop has healing potions, sets of chainmail, and a greatsword")
                 print ("""the shopkeeper, a gruff looking woman with her hand on a dagger, looks at you expenctantly.
-                   \"so, are you just here to look, or are you going to buy something\"
-                       our healing potions are 10, our chainmail is 35, we have a greatsword for 25""")
+                \"so, are you just here to look, or are you going to buy something\"
+                    our healing potions are 10, our chainmail is 35, we have a greatsword for 25""")
                 shopchoice = input("type healing potion, chain mail, or greatsword \n").strip().lower()
                 if shopchoice not in options:
                     print (f" i dont think we sell {shopchoice}")
@@ -256,13 +257,14 @@ while True:
                         print ("you miss!")
                 if battle_choice == "spell":
                     if player_SS <= 0:
-                        print("You don't have any spell slots left!")
-                        return
+                        print("You don't have any spell slots left, you fail to cast the spell!")
+                        
                     print("Choose a spell: Fireball(2), Cure Wounds(1), Magic Missile(1), or Thunderwave(0–1)")
                     spell_choice = input("> ").lower()
                     if spell_choice == "fireball" and player_SS >= 2:
                         player_SS -= 2
                         attack_damage = r.randint(6, 20)
+                        enemy_HP -= attack_damage
                         print(f"You hurl a fireball! {enemy} takes {attack_damage} damage!")
                         
                     elif spell_choice == "cure wounds" and player_SS >= 1:
@@ -334,11 +336,7 @@ while True:
                     primary_ability = player_STR
                 else:
                     primary_ability = player_DEX
-                return
-            if player_HP <= 0:
-                print ("you have been s lain.")
-                for x in range(10):
-                    print ("\n")
+                    
                 break   
             if Turn == 2:
                 if enemy_HP in [1,2,3,4] and r.randint(1,4) == 4:
@@ -355,12 +353,16 @@ while True:
                     print(f"The {enemy} misses!")
                 Turn = 1
             
-       
+            if player_HP <= 0:
+                print ("you have been slain.")
+                for x in range(10):
+                    print ("\n")
+                    return
     def entry():
         global first_chest_stat, healing_potions
         print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
-               There is a door to your left, and a door in front of you. 
-               Behind you is a stairway leading to the surface.""")
+            There is a door to your left, and a door in front of you. 
+            Behind you is a stairway leading to the surface.""")
         if r_monster() == True:
             battle(False)
         while True:
@@ -390,7 +392,7 @@ while True:
     def dining():
         global dining_longsword, healing_potions
         print (""" you step into a large room with a fancy wooden table. some old bread still sits on a tray at the center
-               to your right is a door, to your left is a passage, and in front of you is a wooden door""")
+            to your right is a door, to your left is a passage, and in front of you is a wooden door""")
         if r_monster() == True:
             battle(False)
         while True:
@@ -418,9 +420,9 @@ while True:
                     print ("nothing comes however")
     def hall():
         print (""" you step into a grand hall. three doors lead away from the hall
-               one door is forward
-               one passage is to your left
-               one door is behind you""")
+            one door is forward
+            one passage is to your left
+            one door is behind you""")
         
         if r_monster() == True:
             battle(False)
@@ -536,20 +538,15 @@ while True:
         print ("you strike the final blow. veyzraths crumples to the ground before vanishing in a puff of mist")
         print ("you have defeated the mighty veyzrath and saved the village!")
         win = True
-        break
         return
-    if win == False:
-        print("would you like to start the game?")
-    else:
-        print("would you like to restart the game?")
-    start = input("(y/n)").lower().strip()
-    if start == "y":
-        village()
-    else:
-        print("thank you for playing")
-        break
+    village()
+print("Would you like to start the game?")
+start = input("(y/n): ").lower().strip()
 
-print ("thank you for playing")
-print ("this game was made by Zane Carter, 1st period CSP1") 
+if start == "y":
+    main()
+else:
+    print("thank you for playing")
+    print("this game was made by Zane Carter, 1st period CSP1")
 
 
