@@ -4,12 +4,13 @@ import time as t
 win = False
 
 def main():
+    global player_AC, player_HP, gold, healing_potions, inventory, win, player_STR, player_DEX, player_INT, player_CHA, player_SS, primary_ability, max_HP, first_chest_stat, dining_longsword, empty_ambush, guard_encounter, TaSS, player_crit_roll
     talking = [
         'Did you hear it last night? That cold wind from the old keep… I swear it carried whispers again.',
         'If the lich really has awoken, then the council better do something soon. My chickens haven\'t laid a normal egg in days.',
         'I miss when the scariest thing around here was old Marla\'s stew.',
         'They say the lich\'s eyes burn like ghost-fire. I don\'t plan to get close enough to find out.',
-        'Business is terrible lately. Hard to sell bread when everyone\'s too frightened to eat.',
+        'Business is terrible lately. Hard to sell bread when everyone\'s too frightened to go out.',
         'The blacksmith\'s boy swears he saw undead soldiers marching in the fog. Probably imagination… probably.',
         'If you\'re heading toward the keep, at least buy a charm or two. Can\'t hurt. Might save your soul.',
         'The well water tastes strange lately. Folks blame the lich for everything, but this time? I\'m starting to think they\'re right.',
@@ -71,7 +72,7 @@ def main():
     if clask == "wizard":
         player_STR -= 2
         player_DEX += 1
-        player_INT += 6
+        player_INT += 4
         player_CHA += 1
         player_HP += 3
         player_HP += player_STR
@@ -103,7 +104,7 @@ def main():
         inventory.append("greataxe")
         player_AC += round(player_STR/2, 1)
     player_AC += player_DEX
-    player_SS = player_INT
+    player_SS += round(player_INT/2, 1)
     max_HP = player_HP
     if player_SS < 0:
         player_SS = 0
@@ -286,13 +287,16 @@ def main():
                         print(f"You cast Thunderwave!. {enemy} takes {damage} damage!")
                     else:
                         print("You don't have enough spell slots or failed to cast the spell")
-                if battle_choice == "heal" and healing_potions > 0:
-                    healing_potions -= 1
-                    health_regain = r.randint(4,16)
-                    player_HP += health_regain
-                    if player_HP > max_HP:
-                        player_HP = max_HP
-                    print (f"you guzzle down a healing potion and regain {health_regain} health")
+                if battle_choice == "heal": 
+                    if healing_potions > 0:
+                        healing_potions -= 1
+                        health_regain = r.randint(4,16)
+                        player_HP += health_regain
+                        if player_HP > max_HP:
+                            player_HP = max_HP
+                        print (f"you guzzle down a healing potion and regain {health_regain} health")
+                    else:
+                        print ("you dont have any healing potions left!")
                 Turn = 2
             if not run and enemy_HP <= 0:
                 if boss:
@@ -357,7 +361,9 @@ def main():
                 print ("you have been slain.")
                 for x in range(10):
                     print ("\n")
-                    return
+                    t.sleep(0.2)
+                    break
+                main()
     def entry():
         global first_chest_stat, healing_potions
         print ("""you walk from the crisp air and bright light of the outside into a dimly lit room covered by dust and spiderwebs. 
